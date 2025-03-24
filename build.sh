@@ -28,7 +28,7 @@ let package = Package(
     products: [
         .library(
             name: "$LIBRARY_NAME",
-            type: .dynamic,
+            type: .static,
             targets: ["$LIBRARY_NAME"]
         ),
     ],
