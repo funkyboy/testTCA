@@ -9,19 +9,19 @@ let package = Package(
     products: [
         .library(
             name: "MyLibrary",
-            type: .dynamic,
+            type: .static,
             targets: ["MyLibrary"]
         ),
     ],
-    dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.12.1"),
-    ],
+    // dependencies: [
+    //     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.12.1"),
+    // ],
     targets: [
         .target(
             name: "MyLibrary",
-            dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ],
+            // dependencies: [
+            //     .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            // ],
             path: "Sources/MyLibrary"
         ),
     ]
