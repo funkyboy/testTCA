@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "MyLibrary",
-            type: .static,
+            type: .dynamic,
             targets: ["MyLibrary"]
         ),
     ],
