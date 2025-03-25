@@ -12,45 +12,9 @@ mkdir -p "$OUTPUT_DIR"
 
 # Clean any previous builds
 rm -rf .build
+rm -rf .swiftspm
 rm -rf "$OUTPUT_DIR/$FRAMEWORK_NAME"
-
-# Create Package.swift with TCA dependency if it doesn't exist
-if [ ! -f "Package.swift" ]; then
-  cat > Package.swift << EOF
-// swift-tools-version:5.9
-import PackageDescription
-
-let package = Package(
-    name: "$PACKAGE_NAME",
-    platforms: [
-        .iOS(.v17),
-    ],
-    products: [
-        .library(
-            name: "$LIBRARY_NAME",
-            type: .static,
-            targets: ["$LIBRARY_NAME"]
-        ),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.12.1"),
-    ],
-    targets: [
-        .target(
-            name: "$LIBRARY_NAME",
-            dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ],
-            path: "Sources/$LIBRARY_NAME"
-        ),
-    ]
-)
-EOF
-  echo "Created Package.swift with Swift tools version 5.9 and TCA 1.12.1 dependency"
-  
-  # Create basic directory structure if it doesn't exist
-  mkdir -p "Sources/$LIBRARY_NAME"
-fi
+mkdir -p "Sources/$LIBRARY_NAME"
 
 # Resolve dependencies
 echo "Resolving dependencies..."
@@ -63,9 +27,8 @@ xcodebuild archive \
     -destination "generic/platform=iOS" \
     -archivePath ".build/archives/ios.xcarchive" \
     -derivedDataPath ".build/derived" \
-    -sdk iphoneos \
     -skipMacroValidation \
-    # SWIFT_OPTIMIZATION_LEVEL=-Onone \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
     SWIFT_VERSION=5.9 \
     SKIP_INSTALL=NO \
     BUILD_LIBRARY_FOR_DISTRIBUTION=YES
@@ -77,9 +40,8 @@ xcodebuild archive \
     -destination "generic/platform=iOS Simulator" \
     -archivePath ".build/archives/ios-simulator.xcarchive" \
     -derivedDataPath ".build/derived" \
-    -sdk iphonesimulator \
     -skipMacroValidation \
-    # SWIFT_OPTIMIZATION_LEVEL=-Onone \
+    SWIFT_OPTIMIZATION_LEVEL=-Onone \
     SWIFT_VERSION=5.9 \
     SKIP_INSTALL=NO \
     BUILD_LIBRARY_FOR_DISTRIBUTION=YES
